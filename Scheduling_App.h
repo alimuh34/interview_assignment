@@ -1,12 +1,6 @@
 #ifndef SCHEDULING_APP_H
 #define SCHEDULING_APP_H
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <map>
-#include <set>
-#include <ctime>
 
 // the Participant structure 
 struct Participant {
