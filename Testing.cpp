@@ -1,4 +1,4 @@
-#include "scheduling_app.h"
+#include "Scheduling_App.h"
 
 int main() {
     SchedulingApp app;
@@ -10,38 +10,45 @@ int main() {
     app.addParticipant("Sofie", "sofie@mail.com");
     app.addParticipant("Ashley", "ashley@mail.com");
 
-    // Scheduling meetings
-    std::vector<Participant> meeting1Participants = {
-    {"Ali", "ali@mail.com"}, 
-    {"Martin", "martin@mail.com"}
+    std::vector<Participant> group_A = {
+        {"Ali", "ali@mail.com"},
+        {"Ashley", "ashley@mail.com"}, 
+        {"Sofie", "sofie@mail.com"}
     };
-    app.addMeeting(meeting1Participants, 800);
-
-    std::vector<Participant> meeting2Participants = {
-    {"Mads", "mads@mail.com"}, 
-    {"Sofie", "sofie@mail.com"}
+        std::vector<Participant> group_B =  {
+        {"Martin", "martin@mail.com"},
+        {"Ashley", "ashley@mail.com"}, 
+        {"Mads", "mads@mail.com"},
+        {"Sofie", "sofie@mail.com"}
     };
-    app.addMeeting(meeting2Participants, 900);
+    
+    
+    std::tm meetingTime = {};
+    meetingTime.tm_year = 2024 - 1900; // Year is current year minus 1900
+    meetingTime.tm_mon = 1; // February (zero-based)
+    meetingTime.tm_mday = 18; //18th
+    meetingTime.tm_hour = 9;  // 9 am
+ //   meetingTime.tm_min = 10; 10 min past, this will create an error
+    std::time_t startTime = std::mktime(&meetingTime);
+    
+    
+    
+    // Adding a meeting for group A on the 18th of February at 9 am
+    app.addMeeting(group_A, startTime);
+    // Adding a conflicting meeting for group B
+    app.addMeeting(group_B, startTime);
+    
 
-    std::vector<Participant> meeting3Participants = {
-    {"Ali", "ali@mail.com"}, 
-    {"Ashley", "ashley@mail.com"}};
-    app.addMeeting(meeting3Participants, 1400);
+    // Show the schedule for Ali and Martin
+    Participant Ali = {"Ali", "ali@mail.com"};
+    Participant Martin = {"Martin", "martin@mail.com"};
+    app.showSchedule(Ali);
+    app.showSchedule(Martin);
 
-    // Showing schedule for participants
-    app.showSchedule({"Ali", "ali@mail.com"});
-    app.showSchedule({"Martin", "martin@mail.com"});
-    app.showSchedule({"Mads", "mads@mail.com"});
-    app.showSchedule({"Sofie", "sofie@mail.com"});
-    app.showSchedule({"Ashley", "ashley@mail.com"});
+    // Suggest available time slots for a meeting for group A and B
 
-    // Suggesting meeting times for a group of participants
-    std::vector<Participant> groupParticipants = {
-    {"Ali", "ali@mail.com"}, 
-    {"Martin", "martin@mail.com"}, 
-    {"Sofie", "sofie@mail.com"}
-    };
-    app.suggestTime(groupParticipants);
+    app.suggestTime(group_A);
+    app.suggestTime(group_B);
 
     return 0;
 }

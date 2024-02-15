@@ -4,37 +4,44 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
+#include <set>
+#include <ctime>
 
-// The Participant structure representing a participant with two attributes
+// the Participant structure 
 struct Participant {
     std::string name;
-    std::string email;
+    std::string email; // uniqueness will be ensured
 };
 
-// The Meeting structure representing a meeting with two attributes
+// The Meeting structure
 struct Meeting {
     std::vector<Participant> participants;
-    int meetingTime; // start time of meeting in hrs (8-16)
+    std::time_t startTime; // Start time of meeting (00-23)
 };
 
-// The Scheduling app class
+// The Scheduling app class 
 class SchedulingApp {
 private:
-    std::vector<Meeting> meetings;
-    // method to check availability of a list of participants for a given time slot
-    bool timeAvailability(std::vector<Participant> participants, int meetingTime) const;
+    std::map<std::time_t, std::vector<Meeting>> schedule; // Map start time to meetings
+    std::map<std::string, std::vector<Meeting>> participantSchedule; // Map participant email to their meetings
+    std::set<std::string> participantEmails; // Set to ensure unique participant emails
+
+    // Method to check time availability for a meeting
+    bool timeAvailability(const std::vector<Participant>& participants, const std::time_t& startTime) const;
 
 public:
-    // method to add new participant to the app
-    void addParticipant(std::string name, std::string email);
+    // Method to add a participant to the app
+    void addParticipant(const std::string& name, const std::string& email);
 
     // Method to add a meeting
-    void addMeeting(std::vector<Participant> participants, int meetingTime);
+    void addMeeting(const std::vector<Participant>& participants, std::time_t startTime);
 
-    // method to show schedule of a participant
+    // Method to show schedule of a participant
     void showSchedule(const Participant& participant) const;
 
-    // method to suggest a time slot for a meeting with a group of participants
+    // Method to suggest available time slots for a meeting
+    // starting earliest at the next hour mark
     void suggestTime(const std::vector<Participant>& participants) const;
 };
 
